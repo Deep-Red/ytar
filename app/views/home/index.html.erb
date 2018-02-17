@@ -1,2 +1,10 @@
-<h1>Home#index</h1>
-<p>Find me in app/views/home/index.html.erb</p>
+<div class="container col-lg-6 offset-lg-3">
+<p class="upload-instructions">Upload a text file containing your list of search terms</p>
+
+<%= form_tag("/home", method: "get", action: "parse_file") do %>
+  <div class="form-group">
+      <%= file_field_tag(:a, class: "btn btn-lg btn-primary btn-file") %>
+  </div>
+    <%= submit_tag "Begin", class: 'btn btn-success btn-lg btn-submit col-lg-4 offset-lg-3' %>
+<% end %>
+</div>
