@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   get 'home/index'
 
+  get 'videos/index'
+
   get 'videos/show'
 
   get 'videos/accept'

@@ -1,10 +1,10 @@
 <div class="container col-lg-6 offset-lg-3">
-<p class="upload-instructions">Upload a text file containing your list of search terms</p>
+<p class="upload-instructions">List your search terms below; one search per line.</p>
 
-<%= form_tag("/home", method: "get", action: "parse_file") do %>
+<%= form_tag("/videos/index", method: "get", multipart: true) do %>
   <div class="form-group">
-      <%= file_field_tag(:a, class: "btn btn-lg btn-primary btn-file") %>
+    <%= text_area_tag(:list, "", class: 'form-control') %>
   </div>
-    <%= submit_tag "Begin", class: 'btn btn-success btn-lg btn-submit col-lg-4 offset-lg-3' %>
+    <%= submit_tag "Load", class: 'btn btn-success btn-lg btn-submit col-lg-4 offset-lg-3' %>
 <% end %>
 </div>

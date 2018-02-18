@@ -1,0 +1,10 @@
+<p>You've hit videos#index</p>
+<%= @file.inspect %>
+<br>
+<%= @search_terms %>
+<%= @search_terms.each do |st| %>
+  <p>Search: <% st %><p>
+<% end %>
+<br>
+<p>Contents:</p>
+<%= @contents %>
