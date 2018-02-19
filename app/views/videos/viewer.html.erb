@@ -1,10 +1,20 @@
 <p>videos#viewer</p>
-<%= @search_terms %>
 <%= @offset %>
-<h1><%= @pc %></h1>
 <p><%= @video_list %></p>
 <div class="container">
-<div class="embed-responsive embed-responsive-16by9">
-  <iframe src='https://www.youtube.com/embed/0LgkxEcpREw?rel=0&autoplay=true' allowfullscreen></iframe>
-</div>
+  <div class="row">
+    <div class="video-container col-lg-8">
+      <div class="embed-responsive embed-responsive-16by9">
+        <iframe src='<%= @video %>' allowfullscreen></iframe>
+      </div>
+    </div>
+    <div class="viewer-controls col-lg-4 float-right">
+      <%= form_for :video, url: videos_viewer_path, method: 'get', remote: true do |f| %>
+        <%= f.hidden_field(:list, value: @search_terms.join("\r\n")) %>
+        <%= f.submit "Accept", class: 'form-control btn btn-success btn-md btn-submit float-right'%>
+        <%= f.submit "Reject", class: 'form-control btn btn-danger btn-md btn-submit float-right'%>
+        <%= f.submit "Try Again", class: 'form-control btn btn-warning btn-md btn-submit float-right'%>
+      <% end %>
+    </div>
+  </div>
 </div>

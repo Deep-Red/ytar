@@ -12,8 +12,25 @@ class VideosController < ApplicationController
   def viewer
     @search_terms = params[:video][:list].split("\r\n")
     @offset = params[:video][:offset].to_i || @offset = 0
-    @video_list = []
-    @image_url_list = []
+
+    set_videos_and_urls if (@image_url_list.nil? || @image_url_list.empty?)
+
+    @video = "https://www.youtube.com/embed/#{@video_list[@offset]}?rel=0&autoplay=true"
+  end
+
+  def accept
+  end
+
+  def reject
+  end
+
+  def retry
+  end
+
+  private
+  def set_videos_and_urls
+    @video_list ||= []
+    @image_url_list ||= []
 
     current_search = @search_terms[@offset]
     search_results = Nokogiri::HTML(open("http://www.youtube.com/results?search_query=#{current_search}"))
@@ -27,16 +44,6 @@ class VideosController < ApplicationController
     end
   end
 
-  def accept
-  end
-
-  def reject
-  end
-
-  def retry
-  end
-
-  private
   def videos_params
     params.permit(:list, :offset)
   end
