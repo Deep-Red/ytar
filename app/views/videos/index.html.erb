@@ -1,10 +1,10 @@
-<p>You've hit videos#index</p>
-<%= @file.inspect %>
-<br>
-<%= @search_terms %>
-<%= @search_terms.each do |st| %>
-  <p>Search: <% st %><p>
-<% end %>
-<br>
-<p>Contents:</p>
-<%= @contents %>
+<div class="container col-lg-6 offset-lg-3">
+  <p class="guidance">The following search terms have been chosen:</p>
+  <%= form_for "/videos/show", method: 'get' do |f| %>
+    <% hidden_field(:video, {search_terms: @search_terms, offset: 0}) %>
+    <%= f.submit "Continue", class: 'btn btn-success btn-md btn-submit float-right'%>
+  <% end %>
+  <% @search_terms.each do |st| %>
+    <p><%= st %><p>
+  <% end %>
+</div>

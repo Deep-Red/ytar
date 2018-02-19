@@ -1,10 +1,6 @@
 class VideosController < ApplicationController
   def index
     @search_terms = params[:list].split("\r\n")
-
-#    @file do |line|
-#      @search_terms << line
-#    end
   end
 
   def show
