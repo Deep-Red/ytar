@@ -1,9 +1,15 @@
 class VideosController < ApplicationController
   def index
-    @search_terms = params[:list].split("\r\n")
+    @search_terms = params[:video][:list].split("\r\n")
   end
 
   def show
+    @params = params[:search_terms]
+  end
+
+  def viewer
+    @search_terms = params[:video][:list].split("\r\n")
+    @offset = params[:video][:offset].to_i || @offset = 0
   end
 
   def accept
@@ -17,6 +23,6 @@ class VideosController < ApplicationController
 
   private
   def videos_params
-    params.permit(:list)
+    params.permit(:list, :offset)
   end
 end

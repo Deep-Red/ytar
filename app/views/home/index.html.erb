@@ -1,10 +1,10 @@
 <div class="container col-lg-6 offset-lg-3">
 <p class="guidance">List your search terms below; one search per line.</p>
 
-<%= form_tag("/videos/index", method: "get", multipart: true) do %>
+<%= form_for :video, url: videos_index_path, method: 'get' do |f| %>
   <div class="form-group">
-    <%= text_area_tag(:list, "", class: 'form-control') %>
+    <%= f.text_area(:list, class: 'form-control') %>
   </div>
-    <%= submit_tag "Load", class: 'btn btn-success btn-lg btn-submit col-lg-4 offset-lg-3' %>
+    <%= f.submit "Load", class: 'btn btn-success btn-lg btn-submit col-lg-4 offset-lg-3' %>
 <% end %>
 </div>

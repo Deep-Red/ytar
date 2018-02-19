@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   get 'videos/show'
 
+  get 'videos/viewer'
+
   get 'videos/accept'
 
   get 'videos/reject'
