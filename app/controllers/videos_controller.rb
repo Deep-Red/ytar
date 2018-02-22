@@ -25,15 +25,13 @@ class VideosController < ApplicationController
     attempt_number = session[:attempt_number]
     session[:accepted] << video_list[attempt_number]
 
-    session[:attempt_number] = 0
-    attempt_number = 0
-    session[:offset] += 1
+    advance_search_term
+
+    attempt_number = session[:offset]
     offset = session[:offset]
 
     current_search = search_terms[offset]
-
     video_list = set_video_list(current_search)
-    session[:video_list] = video_list
 
     @video = "https://www.youtube.com/embed/#{video_list[attempt_number]}?rel=0&autoplay=true"
 
@@ -44,12 +42,20 @@ class VideosController < ApplicationController
   end
 
   def reject
-    @search_terms = params[:video][:list].split("\r\n")
-    @offset = 1 + params[:video][:offset]
-    @attempt_number = 0
-    set_session_videos_and_urls
+    search_terms = session[:search_terms]
+    video_list = session[:video_list]
+    offset = session[:offset]
+    session[:rejected] << search_terms[offset]
 
-    @video = "https://www.youtube.com/embed/#{@video_list[@attempt_number]}?rel=0&autoplay=true"
+    advance_search_term
+
+    attempt_number = session[:attempt_number]
+    offset = session[:offset]
+
+    current_search = search_terms[offset]
+    video_list = set_video_list(current_search)
+
+    @video = "https://www.youtube.com/embed/#{video_list[attempt_number]}?rel=0&autoplay=true"
 
     respond_to do |format|
       format.html {redirect_to videos_viewer_path}
@@ -61,8 +67,11 @@ class VideosController < ApplicationController
     video_list = session[:video_list]
     attempt_number = (session[:attempt_number] += 1)
 
-    @video = "https://www.youtube.com/embed/#{video_list[attempt_number]}?rel=0&autoplay=true"
-
+    if (attempt_number <= video_list.length - 1)
+      @video = "https://www.youtube.com/embed/#{video_list[attempt_number]}?rel=0&autoplay=true"
+    else
+      redirect_to videos_reject_path
+    end
     respond_to do |format|
       format.html {redirect_to videos_viewer_path}
       format.js
@@ -96,6 +105,8 @@ class VideosController < ApplicationController
     image_url_list.each do |url|
       video_list << url[/https:\/\/i.ytimg.com\/vi\/(.*)\//, 1]
     end
+    session[:video_list] = video_list
+
     return video_list
   end
 
@@ -106,6 +117,11 @@ class VideosController < ApplicationController
     session[:attempt_number] = an
     session[:accepted] = []
     session[:rejected] = []
+  end
+
+  def advance_search_term
+    session[:attempt_number] = 0
+    session[:offset] += 1
   end
 
   def videos_params
