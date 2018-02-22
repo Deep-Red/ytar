@@ -5,7 +5,7 @@
   <div class="row">
     <div class="video-container col-lg-8">
       <div class="embed-responsive embed-responsive-16by9" id="video-viewer">
-        <iframe class='video-0' src='<%= @video %>' allowfullscreen></iframe>
+        <iframe src='<%= @video %>' allowfullscreen></iframe>
       </div>
     </div>
     <div class="viewer-controls col-lg-4 float-right">
@@ -22,12 +22,6 @@
         <%= f.submit "Reject", class: 'form-control btn btn-danger btn-md btn-submit float-right'%>
       <% end %>
       <%= form_for :video, url: videos_retry_path, method: 'get', remote: true do |f| %>
-        <% @video_list.shift %>
-        <%= f.hidden_field(:list, value: @video_list.join("\r\n")) %>
-        <%= f.hidden_field(:offset, value: @offset) %>
-        <div id="attempt-number-field">
-          <%= f.hidden_field(:attempt_number, value: @attempt_number) %>
-        </div>
         <%= f.submit "Retry", class: 'form-control btn btn-warning btn-md btn-submit float-right'%>
       <% end %>
     </div>

@@ -1,6 +1,8 @@
 <div class="container col-lg-6 offset-lg-3">
   <p class="guidance">The following search terms have been chosen:</p>
   <%= form_for :video, url: videos_viewer_path, method: 'get' do |f| %>
+    <%= f.hidden_field(:offset, value: 0) %>
+    <%= f.hidden_field(:attempt_number, value: 0) %>
     <%= f.hidden_field(:list, value: @search_terms.join("\r\n")) %>
     <%= f.submit "Continue", class: 'btn btn-success btn-md btn-submit float-right'%>
   <% end %>

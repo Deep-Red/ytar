@@ -1,5 +1,1 @@
-var oldClass = $("iframe").attr('class');
-var count = parseInt(oldClass.match(/\d+/)) + 1;
-alert(count);
-$("#video-viewer").html("<iframe class='video-" + count + "' src='<%= @video %>' allowfullscreen></iframe>");
-$("#attempt-number-field").html("<%= f.hidden_field(:attempt_number, value: " + count + ") %>")
+$("#video-viewer").html("<iframe src='<%= @video %>' allowfullscreen></iframe>");
