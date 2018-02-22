@@ -1,4 +1,3 @@
-<p><%= @video_list %></p>
 <div class="container">
   <div class="row">
     <div class="video-container col-lg-8">
@@ -8,15 +7,9 @@
     </div>
     <div class="viewer-controls col-lg-4 float-right">
       <%= form_for :video, url: videos_accept_path, method: 'get', remote: true do |f| %>
-        <%= f.hidden_field(:list, value: @video_list.join("\r\n")) %>
-        <%= f.hidden_field(:offset, value: @offset) %>
-        <%= f.hidden_field(:attempt_number, value: @attempt_number) %>
         <%= f.submit "Accept", class: 'form-control btn btn-success btn-md btn-submit float-right'%>
       <% end %>
       <%= form_for :video, url: videos_reject_path, method: 'get', remote: true do |f| %>
-        <%= f.hidden_field(:list, value: @video_list.join("\r\n")) %>
-        <%= f.hidden_field(:offset, value: @offset) %>
-        <%= f.hidden_field(:attempt_number, value: @attempt_number) %>
         <%= f.submit "Reject", class: 'form-control btn btn-danger btn-md btn-submit float-right'%>
       <% end %>
       <%= form_for :video, url: videos_retry_path, method: 'get', remote: true do |f| %>
