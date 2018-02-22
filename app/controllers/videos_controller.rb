@@ -5,17 +5,9 @@ class VideosController < ApplicationController
     @search_terms = params[:video][:list].split("\r\n")
   end
 
-  def show
-    @search_terms = session[:search_terms]
-  end
-
   def viewer
-    @search_terms = params[:video][:list].split("\r\n")
-    @offset = params[:video][:offset].to_i || @offset = 0
-    @attempt_number ||= 0
 
-    set_session_videos_and_urls if (@image_url_list.nil? || @image_url_list.empty?)
-
+    set_session_videos_and_urls
 
     @video = "https://www.youtube.com/embed/#{@video_list[@attempt_number]}?rel=0&autoplay=true"
 
@@ -23,7 +15,6 @@ class VideosController < ApplicationController
       format.html
       format.js
     end
-
   end
 
   def accept
@@ -70,8 +61,8 @@ class VideosController < ApplicationController
   private
   def set_session_videos_and_urls
     @search_terms = params[:video][:list].split("\r\n")
-    @offset = session[:offset] || 0
-    @attempt_number = session[:attempt_number] || 0
+    @offset = 0
+    @attempt_number = 0
     image_url_list = []
     @video_list = []
 
@@ -94,7 +85,7 @@ class VideosController < ApplicationController
   end
 
   def videos_params
-    params.permit(:list, :offset, :attempt_number)
+    params.permit(:list)
   end
 
 end
