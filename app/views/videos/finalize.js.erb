@@ -1,4 +1,1 @@
-$(".container").html("<div><p>Unfortunately, we were unable to find the following videos:</p>\
-                      <p><%= @rejected %></p></div>\
-                      <div><p>But we need to prepare downloads for:</p>\
-                      <p><%= @accepted %></p></div>");
+$(".row").html("<%= escape_javascript(render 'finalize_body') %>");

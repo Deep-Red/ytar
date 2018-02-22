@@ -6,7 +6,6 @@ class VideosController < ApplicationController
   end
 
   def viewer
-
     set_session_videos_and_urls
 
     video_list = session[:video_list]
@@ -90,6 +89,17 @@ class VideosController < ApplicationController
       format.html { redirect_to videos_viewer_path }
       format.js
     end
+  end
+
+  def download
+    yt_options = {"audio-format"=>"mp3", "extract-audio"=>true, "o"=>"public/%(title)s.%(ext)s"}
+    dl_options = {"filename"=>"Celebrate", "disposition"=>"attachment"}
+    audio = YoutubeDL.download("https://www.youtube.com/watch?v=k2EVsIfq0Y8", yt_options)
+    dl_path = Rails.root + "public/" + File.basename(audio.filename, File.extname(audio.filename))
+    dl_path = [dl_path, ".mp3"].join('')
+
+    send_file(dl_path, dl_options)
+#     send_data("lasso", filename: 'lass.txt')
   end
 
   private

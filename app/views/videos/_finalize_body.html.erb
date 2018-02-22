@@ -1,0 +1,11 @@
+  <div class="row">
+    <div class="video-viewer col-lg-8">
+      <p>Unfortunately, we were unable to find the following videos:</p>
+      <p><%= @rejected %></p>
+      <p>But we need to prepare downloads for:</p>
+      <p><%= @accepted %></p>
+    </div>
+    <div class="viewer-controls col-lg-4 float-right">
+      <%= button_to "Download", class: 'btn btn-success btn-md btn-submit float-right', action: "download", remote: true %>
+    </div>
+  </div>
