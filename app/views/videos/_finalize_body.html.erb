@@ -6,6 +6,6 @@
       <p><%= @accepted %></p>
     </div>
     <div class="viewer-controls col-lg-4 float-right">
-      <%= button_to "Download", class: 'btn btn-success btn-md btn-submit float-right', action: "download", remote: true %>
+      <%= button_to "Download", {action: "download", remote: true}, {class: 'btn btn-success btn-md btn-submit'} %>
     </div>
   </div>
