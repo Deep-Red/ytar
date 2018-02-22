@@ -27,8 +27,10 @@ class VideosController < ApplicationController
 
     advance_search_term
 
-    attempt_number = session[:offset]
+    attempt_number = session[:attempt_number]
     offset = session[:offset]
+
+    redirect_to videos_finalize_path unless offset < search_terms.length
 
     current_search = search_terms[offset]
     video_list = set_video_list(current_search)
@@ -52,6 +54,8 @@ class VideosController < ApplicationController
     attempt_number = session[:attempt_number]
     offset = session[:offset]
 
+    redirect_to videos_finalize_path unless offset < search_terms.length
+
     current_search = search_terms[offset]
     video_list = set_video_list(current_search)
 
@@ -67,13 +71,23 @@ class VideosController < ApplicationController
     video_list = session[:video_list]
     attempt_number = (session[:attempt_number] += 1)
 
-    if (attempt_number <= video_list.length - 1)
-      @video = "https://www.youtube.com/embed/#{video_list[attempt_number]}?rel=0&autoplay=true"
-    else
-      redirect_to videos_reject_path
-    end
+    redirect_to videos_reject_path unless attempt_number < video_list.length
+
+    @video = "https://www.youtube.com/embed/#{video_list[attempt_number]}?rel=0&autoplay=true"
+
     respond_to do |format|
       format.html {redirect_to videos_viewer_path}
+      format.js
+    end
+  end
+
+  def finalize
+    @search_terms = session[:search_terms]
+    @accepted = session[:accepted]
+    @rejected = session[:rejected]
+
+    respond_to do |format|
+      format.html { redirect_to videos_viewer_path }
       format.js
     end
   end
@@ -90,7 +104,6 @@ class VideosController < ApplicationController
     video_list = set_video_list(current_search)
 
     initialize_session_variables(search_terms, video_list, offset, attempt_number)
-
   end
 
   def set_video_list(current_search)

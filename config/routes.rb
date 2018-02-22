@@ -15,5 +15,7 @@ Rails.application.routes.draw do
 
   get 'videos/retry'
 
+  get 'videos/finalize'
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
