@@ -35,7 +35,8 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'bootstrap', '~> 4.0.0.alpha3'
 gem 'jquery-rails'
-gem 'youtube-dl.rb'
+gem 'youtube-dl.rb', :git => 'git://github.com/mhui/youtube-dl.rb' #The youtube-dl binaries on the main branch of this gem are out of date.
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

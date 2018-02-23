@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/mhui/youtube-dl.rb
+  revision: 3dc9c632e7c7045423454c7a22767b66c75d146a
+  specs:
+    youtube-dl.rb (0.3.1.2018.02.11)
+      cocaine (>= 0.5.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -186,8 +193,6 @@ GEM
     websocket-extensions (0.1.3)
     xpath (3.0.0)
       nokogiri (~> 1.8)
-    youtube-dl.rb (0.3.1.2016.09.11.1)
-      cocaine (>= 0.5.4)
 
 PLATFORMS
   ruby
@@ -211,7 +216,7 @@ DEPENDENCIES
   tzinfo-data
   uglifier (>= 1.3.0)
   web-console (>= 3.3.0)
-  youtube-dl.rb
+  youtube-dl.rb!
 
 BUNDLED WITH
    1.16.1

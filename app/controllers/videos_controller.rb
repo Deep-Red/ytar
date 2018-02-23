@@ -92,14 +92,15 @@ class VideosController < ApplicationController
   end
 
   def download
-    yt_options = {"audio-format"=>"mp3", "extract-audio"=>true, "o"=>"public/%(title)s.%(ext)s"}
-    dl_options = {"filename"=>"Celebrate", "disposition"=>"attachment"}
-    audio = YoutubeDL.download("https://www.youtube.com/watch?v=k2EVsIfq0Y8", yt_options)
-    dl_path = Rails.root + "public/" + File.basename(audio.filename, File.extname(audio.filename))
-    dl_path = [dl_path, ".mp3"].join('')
+    yt_options = {"youtube-skip-dash-manifest"=>true, "audio-format"=>"mp3", "extract-audio"=>true, "o"=>"public/%(title)s.%(ext)s"}
+    dl_options = {"disposition"=>"attachment"}
 
-    send_file(dl_path, dl_options)
-#     send_data("lasso", filename: 'lass.txt')
+    session[:accepted].each do |av|
+      audio = YoutubeDL.download(av, yt_options)
+      dl_path = Rails.root + "public/" + File.basename(audio.filename, File.extname(audio.filename))
+      dl_path = [dl_path, ".mp3"].join('')
+      send_file(dl_path, dl_options)
+    end
   end
 
   private
