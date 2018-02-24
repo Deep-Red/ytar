@@ -1,5 +1,6 @@
 class VideosController < ApplicationController
   require 'open-uri'
+  require 'zip'
 
   def index
     @search_terms = params[:video][:list].split("\r\n")
@@ -92,14 +93,34 @@ class VideosController < ApplicationController
   end
 
   def download
+    filenames = []
+    zipfile_name = Rails.root + "public/ytar-#{sprintf( "%0.06f", Time.now.to_f).split('.').join('')}.zip"
     yt_options = {"youtube-skip-dash-manifest"=>true, "audio-format"=>"mp3", "extract-audio"=>true, "o"=>"public/%(title)s.%(ext)s"}
     dl_options = {"disposition"=>"attachment"}
 
     session[:accepted].each do |av|
       audio = YoutubeDL.download(av, yt_options)
-      dl_path = Rails.root + "public/" + File.basename(audio.filename, File.extname(audio.filename))
-      dl_path = [dl_path, ".mp3"].join('')
-      send_file(dl_path, dl_options)
+      dl_name = File.basename(audio.filename, File.extname(audio.filename))
+      dl_name = [dl_name, ".mp3"].join('')
+      filenames << dl_name
+    end
+
+    Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
+      filenames.each do |filename|
+        zipfile.add(filename, File.join(Rails.root + "public/", filename))
+      end
+    end
+
+    send_file(zipfile_name, dl_options)
+
+    filenames.each do |filename|
+      File.delete(File.join(Rails.root + "public/" + filename))
+    end
+
+    respond_to do |format|
+      format.html {redirect_to videos_viewer_path}
+      format.zip do
+      end
     end
   end
 
