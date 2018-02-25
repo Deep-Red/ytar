@@ -1,9 +1,19 @@
   <div class="row">
     <div class="video-viewer col-lg-8">
-      <p>Unfortunately, we were unable to find the following videos:</p>
-      <p><%= @rejected %></p>
-      <p>But we need to prepare downloads for:</p>
-      <p><%= @accepted %></p>
+      <p class="guidance">Downloads will be prepared for:</p>
+      <ul class="list-group">
+      <% @accepted.each do |a| %>
+      <li class="list-group-item"><p><%= a[0] %></p><img src='<%= a[2] %>' /></li>
+      <% end %>
+      </ul>
+      <% unless @rejected.empty? %>
+      <p class="guidance">Unfortunately, we were unable to find the following videos:</p>
+      <ul class="list-group">
+        <% @rejected.each do |r| %>
+          <li class="list-group-item"><%= r %></li>
+        <% end %>
+      </ul>
+      <% end %>
     </div>
     <div class="viewer-controls col-lg-4 float-right">
       <%= button_to "Download", {action: "download", format: "zip", remote: true}, {class: 'btn btn-success btn-md btn-submit'} %>

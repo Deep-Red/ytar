@@ -11,7 +11,7 @@ class VideosController < ApplicationController
 
     video_list = session[:video_list]
     attempt_number = session[:attempt_number]
-    @video = "https://www.youtube.com/embed/#{video_list[attempt_number]}?rel=0&autoplay=true"
+    @video = "https://www.youtube.com/embed/#{video_list[attempt_number][0]}?rel=0&autoplay=true"
 
     respond_to do |format|
       format.html
@@ -23,7 +23,8 @@ class VideosController < ApplicationController
     search_terms = session[:search_terms]
     video_list = session[:video_list]
     attempt_number = session[:attempt_number]
-    session[:accepted] << video_list[attempt_number]
+    offset = session[:offset]
+    session[:accepted] << [search_terms[offset], video_list[attempt_number]].flatten!
 
     advance_search_term
 
@@ -35,7 +36,7 @@ class VideosController < ApplicationController
     current_search = search_terms[offset]
     video_list = set_video_list(current_search)
 
-    @video = "https://www.youtube.com/embed/#{video_list[attempt_number]}?rel=0&autoplay=true"
+    @video = "https://www.youtube.com/embed/#{video_list[attempt_number][0]}?rel=0&autoplay=true"
 
     respond_to do |format|
       format.html {redirect_to videos_viewer_path}
@@ -59,7 +60,7 @@ class VideosController < ApplicationController
     current_search = search_terms[offset]
     video_list = set_video_list(current_search)
 
-    @video = "https://www.youtube.com/embed/#{video_list[attempt_number]}?rel=0&autoplay=true"
+    @video = "https://www.youtube.com/embed/#{video_list[attempt_number][0]}?rel=0&autoplay=true"
 
     respond_to do |format|
       format.html {redirect_to videos_viewer_path}
@@ -73,7 +74,7 @@ class VideosController < ApplicationController
 
     redirect_to videos_reject_path unless attempt_number < video_list.length
 
-    @video = "https://www.youtube.com/embed/#{video_list[attempt_number]}?rel=0&autoplay=true"
+    @video = "https://www.youtube.com/embed/#{video_list[attempt_number][0]}?rel=0&autoplay=true"
 
     respond_to do |format|
       format.html {redirect_to videos_viewer_path}
@@ -82,9 +83,19 @@ class VideosController < ApplicationController
   end
 
   def finalize
-    @search_terms = session[:search_terms]
+    search_terms = session[:search_terms]
     @accepted = session[:accepted]
+    video_list = session[:video_list]
     @rejected = session[:rejected]
+
+#    @names = []
+#    @images = []
+
+#    accepted.each do |a|
+#      @names << search_terms[accepted]
+#      @images << video_list[1]
+#    end
+
 
     respond_to do |format|
       format.html { redirect_to videos_viewer_path }
@@ -99,7 +110,7 @@ class VideosController < ApplicationController
     dl_options = {"disposition"=>"attachment"}
 
     session[:accepted].each do |av|
-      audio = YoutubeDL.download(av, yt_options)
+      audio = YoutubeDL.download(av[1], yt_options)
       dl_name = File.basename(audio.filename, File.extname(audio.filename))
       dl_name = [dl_name, ".mp3"].join('')
       filenames << dl_name
@@ -148,7 +159,7 @@ class VideosController < ApplicationController
     end
 
     image_url_list.each do |url|
-      video_list << url[/https:\/\/i.ytimg.com\/vi\/(.*)\//, 1]
+      video_list << [url[/https:\/\/i.ytimg.com\/vi\/(.*)\//, 1], url]
     end
     session[:video_list] = video_list
 
