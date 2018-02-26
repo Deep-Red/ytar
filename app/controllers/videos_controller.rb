@@ -109,6 +109,16 @@ class VideosController < ApplicationController
     yt_options = {"youtube-skip-dash-manifest"=>true, "audio-format"=>"mp3", "extract-audio"=>true, "o"=>"public/%(title)s.%(ext)s"}
     dl_options = {"disposition"=>"attachment"}
 
+    rejected = session[:rejected]
+    if rejected.length > 0
+      filenames << "missing.txt"
+      File.open("public/missing.txt", "w") do |f|
+        rejected.each do |st|
+          f.puts st
+        end
+      end
+    end
+
     session[:accepted].each do |av|
       audio = YoutubeDL.download(av[1], yt_options)
       dl_name = File.basename(audio.filename, File.extname(audio.filename))
