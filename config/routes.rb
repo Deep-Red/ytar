@@ -17,7 +17,8 @@ Rails.application.routes.draw do
 
   get 'videos/finalize'
 
-  post 'videos/download'
+  get 'videos/prepare_download'
 
+  post 'videos/download'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

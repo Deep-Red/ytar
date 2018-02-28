@@ -84,18 +84,9 @@ class VideosController < ApplicationController
 
   def finalize
     search_terms = session[:search_terms]
-    @accepted = session[:accepted]
+    @accepted = session[:accepted].each { |a| a[0].replace(CGI.unescape(a[0])) }
     video_list = session[:video_list]
-    @rejected = session[:rejected]
-
-#    @names = []
-#    @images = []
-
-#    accepted.each do |a|
-#      @names << search_terms[accepted]
-#      @images << video_list[1]
-#    end
-
+    @rejected = session[:rejected].each { |r| r.replace(CGI.unescape(r)) }
 
     respond_to do |format|
       format.html { redirect_to videos_viewer_path }
@@ -103,11 +94,10 @@ class VideosController < ApplicationController
     end
   end
 
-  def download
+  def prepare_download
     filenames = []
     zipfile_name = Rails.root + "public/ytar-#{sprintf( "%0.06f", Time.now.to_f).split('.').join('')}.zip"
     yt_options = {"youtube-skip-dash-manifest"=>true, "audio-format"=>"mp3", "extract-audio"=>true, "o"=>"public/%(title)s.%(ext)s"}
-    dl_options = {"disposition"=>"attachment"}
 
     rejected = session[:rejected]
     if rejected.length > 0
@@ -119,7 +109,8 @@ class VideosController < ApplicationController
       end
     end
 
-    session[:accepted].each do |av|
+    session[:accepted].each_with_index do |av, i|
+      @currently_processing = i
       audio = YoutubeDL.download(av[1], yt_options)
       dl_name = File.basename(audio.filename, File.extname(audio.filename))
       dl_name = [dl_name, ".mp3"].join('')
@@ -132,7 +123,7 @@ class VideosController < ApplicationController
       end
     end
 
-    send_file(zipfile_name, dl_options)
+    session[:zipfile_name] = zipfile_name
 
     filenames.each do |filename|
       File.delete(File.join(Rails.root + "public/" + filename))
@@ -140,6 +131,18 @@ class VideosController < ApplicationController
 
     respond_to do |format|
       format.html {redirect_to videos_viewer_path}
+      format.js
+    end
+  end
+
+  def download
+    zipfile_name = session[:zipfile_name]
+    dl_options = {"disposition"=>"attachment"}
+
+    send_file(zipfile_name, dl_options)
+
+    respond_to do |format|
+      format.html {redirect_to video_viewer_path}
       format.zip do
       end
     end
