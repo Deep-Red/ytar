@@ -21,3 +21,12 @@
 /yarn-error.log
 
 .byebug_history
+
+# Ignore generated music and zip files
+/public/missing.txt
+/public/ytar*
+/public/*.mp3
+/public/*.m4a
+/public/*.m4a.part
+/public/*.webm
+/public/*.webm.part
