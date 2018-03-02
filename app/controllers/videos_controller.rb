@@ -155,18 +155,18 @@ class VideosController < ApplicationController
   def download
     zipfile_name = session[:zipfile_name]
     zipfile = File.join(Rails.root + "public/" + zipfile_name)
-    dl_options = {"type"=>"application/zip", "disposition"=>"attachment"}
+    dl_options = {:type => "application/zip", :disposition => "attachment"}
 
     puts "file: "
     puts zipfile
 
     send_file(zipfile, dl_options)
 
-    respond_to do |format|
-      format.html {redirect_to videos_viewer_path}
-      format.zip do
-      end 
-    end
+#    respond_to do |format|
+#      format.html {redirect_to videos_viewer_path}
+#      format.zip do
+#      end
+#    end
   end
 
   private
