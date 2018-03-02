@@ -1,4 +1,5 @@
 class VideosController < ApplicationController
+  include ActionController::Live
   require 'open-uri'
   require 'zip'
 
@@ -87,6 +88,7 @@ class VideosController < ApplicationController
     @accepted = session[:accepted].each { |a| a[0].replace(CGI.unescape(a[0])) }
     video_list = session[:video_list]
     @rejected = session[:rejected].each { |r| r.replace(CGI.unescape(r)) }
+    session[:zipfile_name] = "ytar-#{sprintf( "%0.06f", Time.now.to_f).split('.').join('')}.zip"
 
     respond_to do |format|
       format.html { redirect_to videos_viewer_path }
@@ -96,8 +98,7 @@ class VideosController < ApplicationController
 
   def prepare_download
     filenames = []
-    zipfile_name = Rails.root + "public/ytar-#{sprintf( "%0.06f", Time.now.to_f).split('.').join('')}.zip"
-    yt_options = {"youtube-skip-dash-manifest"=>true, "audio-format"=>"mp3", "extract-audio"=>true, "o"=>"public/%(title)s.%(ext)s"}
+    zipfile_name = Rails.root + "public/" + session[:zipfile_name]
 
     rejected = session[:rejected]
     if rejected.length > 0
@@ -109,12 +110,27 @@ class VideosController < ApplicationController
       end
     end
 
-    session[:accepted].each_with_index do |av, i|
-      @currently_processing = i
-      audio = YoutubeDL.download(av[1], yt_options)
-      dl_name = File.basename(audio.filename, File.extname(audio.filename))
-      dl_name = [dl_name, ".mp3"].join('')
-      filenames << dl_name
+    yt_options = {"ignore-errors"=>true, "youtube-skip-dash-manifest"=>true, "audio-format"=>"mp3", "extract-audio"=>true, "o"=>"public/%(title)s.%(ext)s"}
+    response.headers['Content-Type'] = 'text/event-stream'
+    sse = SSE.new(response.stream)
+
+    begin
+
+      session[:accepted].each_with_index do |av, i|
+        currently_processing = i
+        sse.write(:currently_processing => currently_processing)
+        audio = YoutubeDL.download(av[1], yt_options)
+        dl_name = File.basename(audio.filename, File.extname(audio.filename))
+        dl_name = [dl_name, ".mp3"].join('')
+        filenames << dl_name
+      end
+
+      sse.write("Download preparation complete.");
+
+    rescue IOError
+      # Client Disconnected
+    ensure
+      sse.close
     end
 
     Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
@@ -123,29 +139,34 @@ class VideosController < ApplicationController
       end
     end
 
-    session[:zipfile_name] = zipfile_name
-
     filenames.each do |filename|
       File.delete(File.join(Rails.root + "public/" + filename))
     end
+
+#    head :ok, content_type: "text/html"
 
     respond_to do |format|
       format.html {redirect_to videos_viewer_path}
       format.js
     end
+
   end
 
   def download
     zipfile_name = session[:zipfile_name]
-    dl_options = {"disposition"=>"attachment"}
+    zipfile = File.join(Rails.root + "public/" + zipfile_name)
+    dl_options = {:type => "application/zip", :disposition => "attachment"}
 
-    send_file(zipfile_name, dl_options)
+    puts "file: "
+    puts zipfile
 
-    respond_to do |format|
-      format.html {redirect_to video_viewer_path}
-      format.zip do
-      end
-    end
+    send_file(zipfile, dl_options)
+
+#    respond_to do |format|
+#      format.html {redirect_to videos_viewer_path}
+#      format.zip do
+#      end
+#    end
   end
 
   private
@@ -187,6 +208,7 @@ class VideosController < ApplicationController
     session[:attempt_number] = an
     session[:accepted] = []
     session[:rejected] = []
+    session[:zipfile_name] = nil
   end
 
   def advance_search_term

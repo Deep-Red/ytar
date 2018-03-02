@@ -19,7 +19,7 @@
       <%= form_for :video, url: videos_prepare_download_path, method: 'get', remote: true do |f| %>
         <%= f.submit "Prepare", id: "prepare-download-button", class: 'form-control btn btn-success btn-md btn-submit float-right'%>
       <% end %>
-      <%= form_for :video, url: videos_download_path, format: 'zip', remote: true do |f| %>
+      <%= form_for :video, url: videos_download_path, format: 'zip' do |f| %>
         <%= f.submit "Download", id: "download-button", class: 'form-control btn btn-success btn-md btn-submit float-right disabled'%>
       <% end %>
     </div>

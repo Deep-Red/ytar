@@ -1,1 +1,33 @@
 $(".container").html("<%= escape_javascript(render 'finalize_body') %>");
+$("#prepare-download-button").unbind('click');
+$("#prepare-download-button").click(function() {
+  $("#prepare-download-button").addClass("disabled");
+  var stream = new EventSource('/videos/prepare_download');
+  stream.onopen = function() {
+    console.log('Opened connection');
+  };
+  stream.onerror = function(event) {
+    console.log(event);
+  };
+  stream.onmessage = function (event) {
+    console.log(event.data);
+    if (event.data === "Download preparation complete.") {
+      $(".active").removeClass("active");
+      $("#download-button").removeClass("disabled");
+      stream.close();
+    } else {
+      var json = JSON.parse(event.data);
+      if (json.currently_processing > 0) {
+        $("#video-" + (json.currently_processing - 1) + "-status").removeClass("active");
+      }
+      $("#video-" + json.currently_processing + "-status").addClass("active");
+    };
+  };
+  stream.onclose = function(code, reason) {
+    $(".active").removeClass("active");
+    console.log(code, reason);
+  };
+  window.addEventListener('beforeunload', function() {
+    stream.close();
+  });
+});
