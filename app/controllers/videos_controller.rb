@@ -145,17 +145,17 @@ class VideosController < ApplicationController
 
 #    head :ok, content_type: "text/html"
 
-#    respond_to do |format|
-#      format.html {redirect_to videos_viewer_path}
-#      format.js
-#    end
+    respond_to do |format|
+      format.html {redirect_to videos_viewer_path}
+      format.js
+    end
 
   end
 
   def download
     zipfile_name = session[:zipfile_name]
-    zipfile = Rails.root + "public/" + zipfile_name
-    dl_options = {"disposition"=>"attachment"}
+    zipfile = File.join(Rails.root + "public/" + zipfile_name)
+    dl_options = {"type"=>"application/zip", "disposition"=>"attachment"}
 
     puts "file: "
     puts zipfile
@@ -164,7 +164,8 @@ class VideosController < ApplicationController
 
     respond_to do |format|
       format.html {redirect_to videos_viewer_path}
-      format.js
+      format.zip do
+      end 
     end
   end
 
