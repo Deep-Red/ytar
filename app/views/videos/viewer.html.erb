@@ -1,11 +1,11 @@
 <div class="container">
   <div class="row">
-    <div class="video-container col-lg-8">
+    <div class="video-container col-md-8">
       <div class="embed-responsive embed-responsive-16by9" id="video-viewer">
         <iframe src='<%= @video %>' allowfullscreen></iframe>
       </div>
     </div>
-    <div class="main-user-controls col-lg-4 float-right">
+    <div class="main-user-controls col-md-4 float-right">
       <%= form_for :video, url: videos_accept_path, method: 'get', remote: true do |f| %>
         <%= f.submit "Accept", class: 'form-control btn btn-success btn-md btn-submit float-right'%>
       <% end %>

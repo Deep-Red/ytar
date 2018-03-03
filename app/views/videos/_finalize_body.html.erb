@@ -1,21 +1,21 @@
   <div class="row">
-    <div class="video-viewer col-lg-8">
+    <div class="video-viewer col-sm-8 order-2 order-sm-1">
       <p class="guidance">Downloads will be prepared for:</p>
       <ul class="list-group">
-      <% @accepted.each_with_index do |a, i| %>
-      <li class="list-group-item" id="video-<%= i %>-status"><p><%= a[0] %></p><img src='<%= a[2] %>' /></li>
-      <% end %>
+        <% @accepted.each_with_index do |a, i| %>
+        <li class="list-group-item" id="video-<%= i %>-status"><p><%= a[0] %></p><img src='<%= a[2] %>' /></li>
+        <% end %>
       </ul>
       <% unless @rejected.empty? %>
       <p class="guidance">Unfortunately, we were unable to find the following videos:</p>
       <ul class="list-group">
         <% @rejected.each do |r| %>
-          <li class="list-group-item"><%= r %></li>
+        <li class="list-group-item"><%= r %></li>
         <% end %>
       </ul>
       <% end %>
     </div>
-    <div class="main-user-controls col-lg-4 float-right">
+    <div class="main-user-controls col-sm-4 order-1 order-sm-2">
       <%= form_for :video, url: videos_prepare_download_path, method: 'get', remote: true do |f| %>
         <%= f.submit "Prepare", id: "prepare-download-button", class: 'form-control btn btn-success btn-md btn-submit float-right'%>
       <% end %>
