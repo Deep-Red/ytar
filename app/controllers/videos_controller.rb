@@ -125,7 +125,17 @@ class VideosController < ApplicationController
         filenames << dl_name
       end
 
+      Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
+        filenames.each do |filename|
+          zipfile.add(filename, File.join(Rails.root + "public/", filename))
+        end
+      end
+
       sse.write("Download preparation complete.");
+
+      filenames.each do |filename|
+        File.delete(File.join(Rails.root + "public/" + filename))
+      end
 
     rescue IOError
       # Client Disconnected
@@ -133,21 +143,12 @@ class VideosController < ApplicationController
       sse.close
     end
 
-    Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
-      filenames.each do |filename|
-        zipfile.add(filename, File.join(Rails.root + "public/", filename))
-      end
-    end
-
-    filenames.each do |filename|
-      File.delete(File.join(Rails.root + "public/" + filename))
-    end
 
 #    head :ok, content_type: "text/html"
 
     respond_to do |format|
       format.html {redirect_to videos_viewer_path}
-      format.js
+      format.text/event-stream
     end
 
   end
