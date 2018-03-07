@@ -1,26 +1,30 @@
-  <div class="row">
-    <div class="video-viewer col-sm-8 order-2 order-sm-1">
-      <p class="guidance">Downloads will be prepared for:</p>
-      <ul class="list-group">
-        <% @accepted.each_with_index do |a, i| %>
-        <li class="list-group-item" id="video-<%= i %>-status"><p><%= a[0] %></p><img src='<%= a[2] %>' /></li>
-        <% end %>
-      </ul>
-      <% unless @rejected.empty? %>
-      <p class="guidance">Unfortunately, we were unable to find the following videos:</p>
-      <ul class="list-group">
-        <% @rejected.each do |r| %>
-        <li class="list-group-item"><%= r %></li>
-        <% end %>
-      </ul>
+<% content_for(:body_attributes) do %>
+  data-turbolinks="false"
+<% end %>
+
+<div class="row">
+  <div class="video-viewer col-sm-8 order-2 order-sm-1">
+    <p class="guidance">Downloads will be prepared for:</p>
+    <ul class="list-group">
+      <% @accepted.each_with_index do |a, i| %>
+      <li class="list-group-item" id="video-<%= i %>-status"><p><%= a[0] %></p><img src='<%= a[2] %>' /></li>
       <% end %>
-    </div>
-    <div class="main-user-controls col-sm-4 order-1 order-sm-2">
-      <%= form_for :video, url: videos_prepare_download_path, method: 'get', remote: true do |f| %>
-        <%= f.submit "Prepare", id: "prepare-download-button", class: 'form-control btn btn-success btn-md btn-submit float-right'%>
+    </ul>
+    <% unless @rejected.empty? %>
+    <p class="guidance">Unfortunately, we were unable to find the following videos:</p>
+    <ul class="list-group">
+      <% @rejected.each do |r| %>
+      <li class="list-group-item"><%= r %></li>
       <% end %>
-      <%= form_for :video, url: videos_download_path, format: 'zip' do |f| %>
-        <%= f.submit "Download", id: "download-button", class: 'form-control btn btn-success btn-md btn-submit float-right disabled'%>
-      <% end %>
-    </div>
+    </ul>
+    <% end %>
   </div>
+  <div class="main-user-controls col-sm-4 order-1 order-sm-2">
+    <%= form_for :video, url: videos_prepare_download_path, method: 'get', remote: true do |f| %>
+      <%= f.submit "Prepare", id: "prepare-download-button", class: 'form-control btn btn-success btn-md btn-submit float-right'%>
+    <% end %>
+    <%= form_for :video, url: videos_download_path, format: 'zip' do |f| %>
+      <%= f.submit "Download", id: "download-button", class: 'form-control btn btn-success btn-md btn-submit float-right disabled'%>
+    <% end %>
+  </div>
+</div>
