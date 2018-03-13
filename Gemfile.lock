@@ -1,9 +1,9 @@
 GIT
-  remote: https://github.com/mhui/youtube-dl.rb
-  revision: 3dc9c632e7c7045423454c7a22767b66c75d146a
+  remote: https://github.com/Deep-Red/youtube-dl.rb.git
+  revision: 37755757321e13018eeda5dc90d2b5a3d8afd492
   specs:
     youtube-dl.rb (0.3.1.2018.02.11)
-      cocaine (>= 0.5.4)
+      terrapin (>= 0.6.0)
 
 GEM
   remote: https://rubygems.org/
@@ -73,8 +73,6 @@ GEM
     childprocess (0.8.0)
       ffi (~> 1.0, >= 1.0.11)
     climate_control (0.2.0)
-    cocaine (0.6.0)
-      terrapin (= 0.6.0)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0)

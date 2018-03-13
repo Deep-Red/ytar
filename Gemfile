@@ -33,7 +33,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'bootstrap', '~> 4.0.0.alpha3'
 gem 'jquery-rails'
-gem 'youtube-dl.rb', :git => 'https://github.com/mhui/youtube-dl.rb' #The youtube-dl binaries on the main branch of this gem are out of date.
+gem 'youtube-dl.rb', :git => 'https://github.com/Deep-Red/youtube-dl.rb.git' #The youtube-dl binaries on the main branch of this gem are out of date.
 gem 'rubyzip'
 gem 'activerecord-session_store'
 
