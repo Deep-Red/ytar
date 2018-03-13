@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/mhui/youtube-dl.rb
+  remote: https://github.com/mhui/youtube-dl.rb
   revision: 3dc9c632e7c7045423454c7a22767b66c75d146a
   specs:
     youtube-dl.rb (0.3.1.2018.02.11)
@@ -115,6 +115,7 @@ GEM
     nio4r (2.2.0)
     nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
+    pg (1.0.0)
     popper_js (1.12.9)
     public_suffix (3.0.2)
     puma (3.11.2)
@@ -212,6 +213,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jquery-rails
   listen (>= 3.0.5, < 3.2)
+  pg
   puma (~> 3.7)
   rails (~> 5.1.5)
   rubyzip
