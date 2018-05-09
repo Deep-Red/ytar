@@ -197,7 +197,7 @@ class VideosController < ApplicationController
   def set_video_list(current_search)
     image_url_list = []
     video_list = []
-    search_results = Nokogiri::HTML(open("http://www.youtube.com/results?search_query=#{current_search}"))
+    search_results = Nokogiri::HTML(open("https://www.youtube.com/results?search_query=#{current_search}"))
 
     search_results.xpath("//img").each do |image|
       image_url_list << (image.values.select { |v| v[/https:\/\/i.ytimg.com\/vi\/*/]}[0]) unless image.values.select { |v| v[/https:\/\/i.ytimg.com\/vi\/*/]}.empty?
