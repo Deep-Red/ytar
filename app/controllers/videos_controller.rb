@@ -115,9 +115,16 @@ class VideosController < ApplicationController
     sse = SSE.new(response.stream)
 
     begin
+      # Check for duplicate filenames
+      uniq_arr = []
+      session[:accepted].each do |av|
+        uniq_arr << av[0]
+      end
+      dups = uniq_arr.uniq.length == uniq_arr.length
+
 
       session[:accepted].each_with_index do |av, i|
-        yt_options[:o] = "public/#{av[0]}.mp3"
+        yt_options[:o] = dups ? "public/ytdl#{i}#{av[0]}.mp3" : "public/ytd.#{av[0]}.mp3"
         yt_options["postprocessor-args"] = {'preferredcodec': 'mp3'}
         currently_processing = i
         sse.write(:currently_processing => currently_processing)
