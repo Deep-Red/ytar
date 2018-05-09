@@ -110,13 +110,15 @@ class VideosController < ApplicationController
       end
     end
 
-    yt_options = {"ignore-errors"=>true, "youtube-skip-dash-manifest"=>true, "audio-format"=>"mp3", "extract-audio"=>true, "o"=>"public/%(title)s.%(ext)s"}
+    yt_options = {"ignore-errors"=>true, "youtube-skip-dash-manifest"=>true, "audio-format"=>"mp3", "extract-audio"=>true}
     response.headers['Content-Type'] = 'text/event-stream'
     sse = SSE.new(response.stream)
 
     begin
 
       session[:accepted].each_with_index do |av, i|
+        yt_options[:o] = "public/#{av[0]}.mp3"
+        yt_options["postprocessor-args"] = {'preferredcodec': 'mp3'}
         currently_processing = i
         sse.write(:currently_processing => currently_processing)
         audio = YoutubeDL.download(av[1], yt_options)
