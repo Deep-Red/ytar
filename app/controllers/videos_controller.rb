@@ -4,7 +4,7 @@ class VideosController < ApplicationController
   require 'zip'
 
   def index
-    @search_terms = videos_params[:video][:list].split("\r\n")
+    @search_terms = videos_params["list"].split("\r\n")
   end
 
   def viewer
@@ -180,7 +180,7 @@ class VideosController < ApplicationController
 
   private
   def set_session_videos_and_urls
-    search_terms = videos_params[:video][:list].split("\r\n")
+    search_terms = videos_params["list"].split("\r\n")
     search_terms.map! { |st| CGI.escape(st) }
     offset = 0
     attempt_number = 0
@@ -226,7 +226,7 @@ class VideosController < ApplicationController
   end
 
   def videos_params
-    params.permit(:video)
+    params.require(:video)
   end
 
 end
