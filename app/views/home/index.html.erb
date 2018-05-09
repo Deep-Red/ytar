@@ -3,7 +3,7 @@
 
 <%= form_for :video, url: videos_index_path, method: 'get' do |f| %>
   <div class="form-group">
-    <%= text_area_tag :list, class: 'form-control' %>
+    <%= f.text_area(:list, class: 'form-control') %>
   </div>
     <%= f.submit "Load", class: 'btn btn-success btn-lg btn-submit col-lg-4 offset-lg-3' %>
 <% end %>
