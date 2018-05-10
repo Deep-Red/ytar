@@ -36,6 +36,7 @@ gem 'jquery-rails'
 gem 'youtube-dl.rb', :git => 'https://github.com/Deep-Red/youtube-dl.rb.git' #The youtube-dl binaries on the main branch of this gem are out of date.
 gem 'rubyzip'
 gem 'activerecord-session_store'
+gem 'pg'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -53,7 +54,6 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   # Use postgres as the database for Active Record
-  gem 'pg'
 end
 
 group :production do
