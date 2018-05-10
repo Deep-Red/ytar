@@ -110,7 +110,7 @@ class VideosController < ApplicationController
       end
     end
 
-    yt_options = {"ignore-errors"=>true, "youtube-skip-dash-manifest"=>true, "audio-format"=>"mp3", "extract-audio"=>true}
+    yt_options = {"ignore-errors"=>true, "youtube-skip-dash-manifest"=>true, "extract-audio"=>true}
     response.headers['Content-Type'] = 'text/event-stream'
     sse = SSE.new(response.stream)
 
@@ -124,12 +124,12 @@ class VideosController < ApplicationController
 
 
       session[:accepted].each_with_index do |av, i|
-        yt_options[:o] = dups ? "public/ytdl#{i}#{av[0]}.mp3" : "public/#{av[0]}.mp3"
+        yt_options[:o] = dups ? "public/ytdl#{i}#{av[0]}.opus" : "public/#{av[0]}.opus"
         currently_processing = i
         sse.write(:currently_processing => currently_processing)
         audio = YoutubeDL.download(av[1], yt_options)
         dl_name = File.basename(audio.filename, File.extname(audio.filename))
-        dl_name = [dl_name, ".mp3"].join('')
+        dl_name = [dl_name, ".opus"].join('')
         filenames << dl_name
       end
 

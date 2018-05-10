@@ -25,7 +25,7 @@
 # Ignore generated music and zip files
 /public/missing.txt
 /public/ytar*
-/public/*.mp3
+/public/*.opus
 /public/*.m4a
 /public/*.m4a.part
 /public/*.webm
