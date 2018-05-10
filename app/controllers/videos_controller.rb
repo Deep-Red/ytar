@@ -41,7 +41,7 @@ class VideosController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.js { render 'videos/accept' }
+      format.js
     end
   end
 
