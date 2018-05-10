@@ -124,7 +124,7 @@ class VideosController < ApplicationController
 
 
       session[:accepted].each_with_index do |av, i|
-        yt_options[:o] = dups ? "public/ytdl#{i}#{av[0]}.mp3" : "public/ytd.#{av[0]}.mp3"
+        yt_options[:o] = dups ? "public/ytdl#{i}#{av[0]}.mp3" : "public/#{av[0]}.mp3"
         currently_processing = i
         sse.write(:currently_processing => currently_processing)
         audio = YoutubeDL.download(av[1], yt_options)
