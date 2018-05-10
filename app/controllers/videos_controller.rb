@@ -40,8 +40,8 @@ class VideosController < ApplicationController
     @video = "https://www.youtube.com/embed/#{video_list[attempt_number][0]}?rel=0&autoplay=true"
 
     respond_to do |format|
-      format.html { redirect_to root_url }
-      format.js { render 'videos/update_preview' }
+      format.html
+      format.js { render 'videos/accept' }
     end
   end
 
