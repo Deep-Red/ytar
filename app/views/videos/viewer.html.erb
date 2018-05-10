@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="main-user-controls col-md-4 float-right">
-      <%= link_to 'Accept', videos_accept_path, class: "btn btn-success btn-md", remote: true %>
+      <%= link_to 'Accept', videos_accept_path(:format => "js"), class: "btn btn-success btn-md", remote: true %>
       <%= form_for :video, url: videos_accept_path, method: 'get', remote: true do |f| %>
       <%= f.hidden_field(:dummy_data, value: 0) %>
       <%= f.submit "Accept", class: 'form-control btn btn-success btn-md btn-submit float-right'%>
